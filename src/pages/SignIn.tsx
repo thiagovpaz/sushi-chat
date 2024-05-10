@@ -1,7 +1,11 @@
+import { useCallback } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { z } from 'zod';
+
+import { useAuth } from '@/contexts/auth-context';
 
 import { Logo } from '@/components/Logo';
 import { TextInput } from '@/components/TextInput';
@@ -35,13 +39,22 @@ const SignIn = () => {
     formState: { errors },
   } = form;
 
-  const onSubmit = async (data: SignInData) => {
-    try {
-      console.log(data);
-    } catch (e) {
-      console.log(e);
-    }
-  };
+  const { signIn } = useAuth();
+
+  const onSubmit = useCallback(
+    async (data: SignInData) => {
+      try {
+        await toast.promise(signIn(data), {
+          pending: 'Connecting',
+          success: 'Connected',
+          error: 'Failed to login',
+        });
+      } catch (e) {
+        console.log(e);
+      }
+    },
+    [signIn],
+  );
 
   return (
     <div className="flex h-screen items-center justify-center">
@@ -81,4 +94,4 @@ const SignIn = () => {
   );
 };
 
-export default SignIn;
+export { SignIn };

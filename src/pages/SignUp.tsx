@@ -1,11 +1,16 @@
 import { FormProvider, useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { toast } from 'react-toastify';
 import { z } from 'zod';
 
 import { Logo } from '@/components/Logo';
 import { TextInput } from '@/components/TextInput';
 import { Button } from '@/components/Button';
+
+import { useAuth } from '@/contexts/auth-context';
+
+import { api } from '@/services/api';
 
 interface SignUpData {
   name: string;
@@ -38,8 +43,20 @@ const SignUp = () => {
     formState: { errors },
   } = form;
 
-  const onSubmit = (data: SignUpData) => {
-    console.log(JSON.stringify(data));
+  const { signIn } = useAuth();
+
+  const onSubmit = async (data: SignUpData) => {
+    try {
+      await toast.promise(api.post('/auth/signup', data), {
+        pending: 'Creating Account',
+        success: 'Account Created',
+        error: 'Failed to create account',
+      });
+
+      await signIn(data);
+    } catch (e) {
+      console.log('error');
+    }
   };
 
   return (
@@ -83,4 +100,4 @@ const SignUp = () => {
   );
 };
 
-export default SignUp;
+export { SignUp };
