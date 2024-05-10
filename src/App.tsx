@@ -1,6 +1,6 @@
 const App = () => {
   return (
-    <div className="flex h-screen flex-col items-center justify-center text-red-500">
+    <div className="flex h-screen flex-col items-center justify-center">
       <img
         src="/logo.png"
         alt="Happy Sushi"
