@@ -10,7 +10,7 @@ const Button: React.FC<ButtonProps> = ({ children, className, ...props }) => {
     <button
       {...props}
       className={twMerge(
-        'h-[50px] w-[100%] rounded-lg bg-green-300 text-lg text-black',
+        'flex h-[50px] w-[100%] items-center justify-center rounded-lg bg-green-300 text-lg text-black',
         className,
       )}
     >

@@ -42,11 +42,11 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const [data, setData] = useState<IAuthState>(() => {
     const token = localStorage.getItem('sushi-chat:token');
-    const user = localStorage.getItem('sushi-chat:user') as unknown as IUser;
+    const user = localStorage.getItem('sushi-chat:user');
 
     if (token && user) {
       api.defaults.headers.common.Authorization = `Bearer ${token}`;
-      return { token, user: user };
+      return { token, user: JSON.parse(user) };
     }
 
     return {} as IAuthState;

@@ -2,10 +2,13 @@ import { createBrowserRouter } from 'react-router-dom';
 
 import { PrivateRoute } from '@/components/PrivateRoute';
 
-import { App } from '@/App';
+import { AuthenticatedLayout } from '@/layouts/AuthenticatedLayout';
+
 import { SignIn } from '@/pages/SignIn';
 import { SignUp } from '@/pages/SignUp';
 import { Rooms } from '@/pages/Rooms';
+import { Chat } from '@/pages/Chat';
+import { Message } from '@/pages/Message';
 import { NoMatch } from '@/pages/NoMatch';
 
 const router = createBrowserRouter([
@@ -13,18 +16,24 @@ const router = createBrowserRouter([
     path: '/',
     element: (
       <PrivateRoute>
-        <App />
+        <AuthenticatedLayout />
       </PrivateRoute>
     ),
     errorElement: <NoMatch />,
-  },
-  {
-    path: '/rooms',
-    element: (
-      <PrivateRoute>
-        <Rooms />
-      </PrivateRoute>
-    ),
+    children: [
+      {
+        path: '/rooms',
+        element: <Rooms />,
+      },
+      {
+        path: '/rooms/:id',
+        element: <Chat />,
+      },
+      {
+        path: '/messages',
+        element: <Message />,
+      },
+    ],
   },
   {
     path: '/signin',
