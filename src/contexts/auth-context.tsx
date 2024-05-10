@@ -7,6 +7,7 @@ import React, {
 } from 'react';
 
 import { api } from '../services/api';
+import { chat } from '../services/chat';
 
 interface IUser {
   id: string;
@@ -46,6 +47,9 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
     if (token && user) {
       api.defaults.headers.common.Authorization = `Bearer ${token}`;
+
+      chat.connect(token);
+
       return { token, user: JSON.parse(user) };
     }
 
@@ -66,6 +70,8 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         localStorage.setItem('sushi-chat:token', token);
         localStorage.setItem('sushi-chat:user', JSON.stringify(user));
 
+        chat.connect(token);
+
         setData({ token, user });
       } catch (error: unknown) {
         throw new Error(error as string);
@@ -79,6 +85,8 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const signOut = useCallback(() => {
     localStorage.removeItem('sushi-chat:token');
     localStorage.removeItem('sushi-chat:user');
+
+    chat.disconnect();
 
     setData({} as IAuthState);
   }, []);
